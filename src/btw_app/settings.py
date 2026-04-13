@@ -18,10 +18,11 @@ from dotenv import load_dotenv
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 # BASE_DIR is the src/ folder
 BASE_DIR = Path(__file__).resolve().parent.parent
-# The project root folder.
+# The project root folder
 ROOT_DIR = BASE_DIR.parent
+
 # Load environment variables from .env file (if one is present)
-load_dotenv()
+load_dotenv(BASE_DIR / ".env")
 
 # The author value that will be used in the footer of the application
 AUTHOR = os.getenv("AUTHOR")
@@ -30,15 +31,22 @@ AUTHOR = os.getenv("AUTHOR")
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-mnp$i)1zfiga%tre=iv5b97+t$7zji57d$#t4rk_#1@#*^mi9b"
+SECRET_KEY = os.getenv(
+    "SECRET_KEY",
+    "django-insecure-mnp$i)1zfiga%tre=iv5b97+t$7zji57d$#t4rk_#1@#*^mi9b",
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG", "true") == "true"
-host_list = os.getenv("ALLOWED_HOSTS", "localhost, 127.0.0.1, 0.0.0.0")
+DEBUG = os.getenv("DEBUG", "true").strip().lower() == "true"
 
-ALLOWED_HOSTS = [x.strip() for x in host_list.split(",")]
+host_list = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1,0.0.0.0")
+ALLOWED_HOSTS = [host.strip() for host in host_list.split(",") if host.strip()]
+
+csrf_trusted_origins = os.getenv("CSRF_TRUSTED_ORIGINS", "")
+CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in csrf_trusted_origins.split(",") if origin.strip()]
 
 print(f"Allowed Hosts: \t\t{ALLOWED_HOSTS}")
+print(f"CSRF Trusted Origins: \t{CSRF_TRUSTED_ORIGINS}")
 print(f"Author: \t\t{AUTHOR}")
 print(f"Base Directory: \t{BASE_DIR}")
 
@@ -135,14 +143,16 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = "/static/"
-STATIC_ROOT = BASE_DIR / "staticfiles"  # or os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_DIRS = [BASE_DIR / "static"]  # if you have a 'static' folder for your app assets
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_DIRS = [BASE_DIR / "static"]
 
 
 # Media files (User-uploaded files)
 # https://docs.djangoproject.com/en/6.0/topics/files/
+
 MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_ROOT = BASE_DIR / "media"
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/6.0/ref/settings/#default-auto-field
