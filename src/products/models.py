@@ -15,6 +15,7 @@ class Category(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
+        """Return the tag name as a human-readable string."""
         return self.name
 
     class Meta:
