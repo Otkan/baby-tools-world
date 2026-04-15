@@ -22,6 +22,19 @@ class Category(models.Model):
         verbose_name_plural = "Categories"
 
 
+class Tag(models.Model):
+    name = models.CharField(max_length=50, unique=True, null=False, blank=False)
+    created_at = models.DateTimeField(auto_now_add=True, editable=False)
+    updated_at = models.DateTimeField(auto_now=True, editable=False)
+
+    def __str__(self) -> str:
+        """Return the tag name as a human-readable string."""
+        return self.name
+
+    class Meta:
+        ordering = ["name"]
+
+
 class Product(models.Model):
 
     category = models.ForeignKey(Category, null=True, on_delete=models.DO_NOTHING)
@@ -29,6 +42,7 @@ class Product(models.Model):
     image = models.ImageField(upload_to="imgs/products/", null=True, blank=True)
     name = models.CharField(max_length=80, blank=False, null=False)
     price = models.DecimalField(max_digits=6, decimal_places=2, validators=[MinValueValidator(Decimal("0.00"))])
+    tags = models.ManyToManyField(Tag, blank=True, related_name="products")
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
