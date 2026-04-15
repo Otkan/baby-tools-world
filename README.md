@@ -52,6 +52,32 @@ The project is modularized into several apps:
 Each app has its own `models.py`, `views.py`, `urls.py`, and `admin.py` files to encapsulate its functionality.
 
 
+### Product Tag System
+
+* Contains a `Tag` model
+* A many-to-many relationship between `Product` and `Tag`
+* Tags can be assigned to products in the Django admin panel
+* Tags are displayed on the product detail page
+
+### Admin Panel
+
+* The `Tag` model is registered in the admin interface
+* Tags can be created, edited, and deleted via the admin panel
+* Products can be filtered by tags
+* A horizontal filter UI is added for better usability when assigning tags
+
+### Product Detail Page
+
+* A "Product-Tags" section is added below the rating summary
+* All assigned tags are displayed as badges
+* If no tags are available, a fallback message is shown
+
+### Form Handling
+
+* After submitting a review, the form fields (rating and comment) are cleared
+* This is handled via redirect logic and conditional form initialization
+* Improves user experience and prevents accidental duplicate submissions
+
 ## Usage
 
 In this section you can read about the project a bit more in detail.
